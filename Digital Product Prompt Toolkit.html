@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<!-- saved from url=(0246)file:///Users/alejandra.rubio/Library/Application%20Support/Claude/local-agent-mode-sessions/fd2eac14-cea0-483b-967d-a5eba8902729/d6cbc097-6a9b-4621-83d5-74266a468c86/local_0968e4f2-2df2-4d48-856c-157bb5c228e8/outputs/digital_product_toolkit.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Product Prompt Toolkit</title>
+<style>
+  :root {
+    --bg:          #0D1117;
+    --bg-2:        #161B22;
+    --bg-3:        #1C2333;
+    --bg-4:        #21262D;
+    --violet:      #8B5CF6;
+    --violet-dim:  #6D28D9;
+    --violet-glow: rgba(139,92,246,.25);
+    --cyan:        #06B6D4;
+    --cyan-dim:    #0891B2;
+    --cyan-glow:   rgba(6,182,212,.2);
+    --green:       #10B981;
+    --green-glow:  rgba(16,185,129,.15);
+    --orange:      #F59E0B;
+    --orange-glow: rgba(245,158,11,.15);
+    --text-bright: #F0F6FC;
+    --text-mid:    #8B949E;
+    --text-dim:    #484F58;
+    --border:      #30363D;
+    --border-dim:  #21262D;
+    --sidebar-w:   265px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Segoe UI', -apple-system, Arial, sans-serif;
+    background: var(--bg); color: var(--text-bright);
+    display: flex; min-height: 100vh; font-size: 14px;
+  }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--violet); }
+
+  /* ══════════════════════════════════════════════
+     SIDEBAR
+  ══════════════════════════════════════════════ */
+  #sidebar {
+    width: var(--sidebar-w); min-height: 100vh;
+    background: var(--bg-2);
+    border-right: 1px solid var(--border);
+    display: flex; flex-direction: column;
+    position: fixed; top: 0; left: 0;
+    overflow-y: auto; z-index: 100;
+  }
+  #sidebar-header {
+    padding: 28px 20px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .logo-mark {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 38px; height: 38px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--violet), var(--cyan));
+    font-size: 18px; margin-bottom: 12px;
+    box-shadow: 0 0 16px var(--violet-glow);
+  }
+  #sidebar-header h1 {
+    font-size: 14px; font-weight: 700; color: var(--text-bright);
+    line-height: 1.4; letter-spacing: -.2px;
+  }
+  #sidebar-header p { font-size: 11px; color: var(--text-mid); margin-top: 3px; }
+
+  #sidebar nav { padding: 10px 0; flex: 1; }
+  .nav-section {
+    padding: 14px 20px 5px;
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1.2px; color: var(--text-dim);
+  }
+  .nav-item {
+    display: flex; align-items: center; gap: 9px;
+    padding: 8px 20px; cursor: pointer;
+    font-size: 13px; color: var(--text-mid);
+    border-left: 2px solid transparent;
+    transition: all .15s; user-select: none;
+  }
+  .nav-item:hover { color: var(--text-bright); background: var(--bg-3); }
+  .nav-item.active {
+    color: var(--violet); background: rgba(139,92,246,.08);
+    border-left-color: var(--violet); font-weight: 600;
+  }
+  .nav-item .icon { font-size: 13px; width: 16px; text-align: center; flex-shrink: 0; }
+
+  /* ══════════════════════════════════════════════
+     MAIN
+  ══════════════════════════════════════════════ */
+  #main { margin-left: var(--sidebar-w); flex: 1; }
+  .page { display: none; padding: 40px 44px 72px; max-width: 900px; }
+  .page.active { display: block; }
+
+  .page-title {
+    font-size: 24px; font-weight: 800; color: var(--text-bright);
+    margin-bottom: 6px; letter-spacing: -.4px;
+  }
+  .page-subtitle {
+    font-size: 13.5px; color: var(--text-mid); margin-bottom: 32px;
+    line-height: 1.65; max-width: 620px;
+  }
+
+  /* ══════════════════════════════════════════════
+     HOME
+  ══════════════════════════════════════════════ */
+  .home-hero {
+    background: linear-gradient(135deg, var(--bg-3) 0%, #1a1040 100%);
+    border: 1px solid var(--border);
+    border-radius: 16px; padding: 40px;
+    margin-bottom: 28px; position: relative; overflow: hidden;
+  }
+  .home-hero::before {
+    content: ''; position: absolute; top: -60px; right: -60px;
+    width: 220px; height: 220px; border-radius: 50%;
+    background: radial-gradient(circle, var(--violet-glow) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .home-hero::after {
+    content: ''; position: absolute; bottom: -40px; left: 40%;
+    width: 160px; height: 160px; border-radius: 50%;
+    background: radial-gradient(circle, var(--cyan-glow) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .home-hero h2 {
+    font-size: 30px; font-weight: 800; margin-bottom: 12px;
+    background: linear-gradient(90deg, var(--text-bright), var(--violet));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .home-hero p { font-size: 14px; color: var(--text-mid); line-height: 1.7; max-width: 540px; }
+
+  .home-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 22px; }
+  .home-card {
+    background: var(--bg-2); border: 1px solid var(--border);
+    border-radius: 12px; padding: 22px; cursor: pointer;
+    transition: all .2s; position: relative; overflow: hidden;
+  }
+  .home-card::before {
+    content: ''; position: absolute; inset: 0; border-radius: 12px;
+    background: linear-gradient(135deg, var(--violet-glow), transparent);
+    opacity: 0; transition: opacity .2s;
+  }
+  .home-card:hover { border-color: var(--violet); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.4); }
+  .home-card:hover::before { opacity: 1; }
+  .home-card .hc-icon { font-size: 26px; margin-bottom: 12px; }
+  .home-card h3 { font-size: 13.5px; font-weight: 700; color: var(--text-bright); margin-bottom: 5px; }
+  .home-card p  { font-size: 12px; color: var(--text-mid); line-height: 1.55; }
+
+  /* ══════════════════════════════════════════════
+     NICHE CARDS
+  ══════════════════════════════════════════════ */
+  .niche-grid { display: grid; gap: 16px; }
+  .niche-card {
+    background: var(--bg-2); border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden; transition: all .2s;
+  }
+  .niche-card:hover { border-color: var(--cyan); box-shadow: 0 4px 20px rgba(6,182,212,.12); }
+  .niche-card-header {
+    background: linear-gradient(90deg, #1a0a3a, #0a1a3a);
+    padding: 14px 18px; display: flex; align-items: center; gap: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .niche-num {
+    background: linear-gradient(135deg, var(--violet), var(--cyan));
+    color: white; font-size: 15px; font-weight: 800;
+    width: 34px; height: 34px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; box-shadow: 0 0 12px var(--violet-glow);
+  }
+  .niche-card-header h3 { color: var(--text-bright); font-size: 14px; font-weight: 700; }
+  .niche-card-body { padding: 16px 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .niche-meta { font-size: 12px; color: var(--text-mid); }
+  .niche-meta strong { display: block; color: var(--cyan); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; margin-bottom: 2px; }
+  .niche-why {
+    grid-column: 1/-1; background: rgba(139,92,246,.06);
+    border: 1px solid rgba(139,92,246,.15);
+    border-radius: 8px; padding: 10px 12px;
+    font-size: 12.5px; color: var(--text-mid); line-height: 1.6;
+  }
+  .niche-why strong { color: var(--violet); }
+  .rec-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(245,158,11,.1); border: 1px solid rgba(245,158,11,.3);
+    color: var(--orange); font-size: 12px; font-weight: 600;
+    padding: 7px 14px; border-radius: 8px; margin-bottom: 18px;
+  }
+
+  /* ══════════════════════════════════════════════
+     PROMPT BUILDER
+  ══════════════════════════════════════════════ */
+  .prompt-builder {
+    background: var(--bg-2); border: 1px solid var(--border);
+    border-radius: 14px; overflow: hidden;
+  }
+  .builder-top {
+    background: linear-gradient(90deg, rgba(139,92,246,.08), rgba(6,182,212,.05));
+    border-bottom: 1px solid var(--border); padding: 18px 24px;
+  }
+  .builder-top h2 { font-size: 15px; font-weight: 700; color: var(--text-bright); margin-bottom: 3px; }
+  .builder-top p  { font-size: 12.5px; color: var(--text-mid); }
+  .builder-body { display: grid; grid-template-columns: 1fr 1fr; }
+  .builder-fields { padding: 22px 24px; border-right: 1px solid var(--border); }
+  .builder-preview { padding: 22px 24px; display: flex; flex-direction: column; background: rgba(0,0,0,.2); }
+  .section-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1px; color: var(--text-dim); margin-bottom: 14px;
+  }
+
+  .field-group { margin-bottom: 15px; }
+  .field-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-mid); margin-bottom: 5px; }
+  .field-group input, .field-group textarea {
+    width: 100%; padding: 9px 12px;
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 7px; font-size: 12.5px; color: var(--text-bright);
+    font-family: inherit; transition: border-color .15s, box-shadow .15s; resize: vertical;
+  }
+  .field-group input::placeholder, .field-group textarea::placeholder { color: var(--text-dim); }
+  .field-group input:focus, .field-group textarea:focus {
+    outline: none; border-color: var(--violet);
+    box-shadow: 0 0 0 3px var(--violet-glow);
+  }
+  .field-group .hint { font-size: 11px; color: var(--text-dim); margin-top: 3px; }
+
+  .prompt-output {
+    flex: 1; background: var(--bg);
+    border: 1px solid var(--border); border-radius: 8px;
+    padding: 14px; font-family: 'Courier New', monospace;
+    font-size: 11.5px; line-height: 1.75; color: #E2E8F0;
+    white-space: pre-wrap; word-break: break-word; min-height: 220px;
+  }
+
+  .copy-btn {
+    margin-top: 12px; padding: 10px 18px;
+    background: linear-gradient(135deg, var(--violet), var(--violet-dim));
+    color: white; border: none; border-radius: 8px;
+    font-size: 12.5px; font-weight: 700; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 7px;
+    transition: all .15s; box-shadow: 0 2px 12px var(--violet-glow);
+    align-self: flex-start;
+  }
+  .copy-btn:hover { background: linear-gradient(135deg, #9d6fff, var(--violet)); box-shadow: 0 4px 18px var(--violet-glow); transform: translateY(-1px); }
+  .copy-btn.copied { background: linear-gradient(135deg, var(--green), #059669); box-shadow: 0 2px 12px var(--green-glow); }
+
+  /* ══════════════════════════════════════════════
+     INFO BOXES
+  ══════════════════════════════════════════════ */
+  .tip-box {
+    background: var(--green-glow); border: 1px solid rgba(16,185,129,.25);
+    border-radius: 10px; padding: 14px 16px; margin-bottom: 20px;
+    font-size: 13px; color: var(--text-mid); line-height: 1.6;
+  }
+  .tip-box strong { color: var(--green); }
+  .info-box {
+    background: var(--orange-glow); border: 1px solid rgba(245,158,11,.25);
+    border-radius: 10px; padding: 14px 16px; margin-bottom: 20px;
+    font-size: 13px; color: var(--text-mid); line-height: 1.6;
+  }
+  .info-box strong { color: var(--orange); }
+
+  /* ══════════════════════════════════════════════
+     CHECKLIST
+  ══════════════════════════════════════════════ */
+  .card {
+    background: var(--bg-2); border: 1px solid var(--border);
+    border-radius: 12px; padding: 22px; margin-bottom: 20px;
+  }
+  .card-title { font-size: 14px; font-weight: 700; color: var(--text-bright); margin-bottom: 14px; }
+
+  .checklist { list-style: none; }
+  .checklist li {
+    display: flex; gap: 11px; align-items: flex-start;
+    padding: 10px 0; border-bottom: 1px solid var(--border-dim);
+    font-size: 13px; color: var(--text-mid);
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist li input[type=checkbox] {
+    margin-top: 2px; accent-color: var(--violet);
+    width: 15px; height: 15px; flex-shrink: 0; cursor: pointer;
+  }
+  .checklist li label { cursor: pointer; line-height: 1.55; }
+  .checklist li input:checked + label { text-decoration: line-through; color: var(--text-dim); }
+
+  /* ══════════════════════════════════════════════
+     STEP TABS
+  ══════════════════════════════════════════════ */
+  .step-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 24px; }
+  .step-tab {
+    padding: 7px 16px; border-radius: 6px; font-size: 12px; font-weight: 600;
+    cursor: pointer; border: 1px solid var(--border);
+    background: var(--bg-2); color: var(--text-mid); transition: all .15s;
+  }
+  .step-tab:hover { border-color: var(--violet); color: var(--violet); }
+  .step-tab.active {
+    background: rgba(139,92,246,.15); color: var(--violet);
+    border-color: var(--violet); box-shadow: 0 0 12px var(--violet-glow);
+  }
+  .step-panel { display: none; }
+  .step-panel.active { display: block; }
+
+  /* ══════════════════════════════════════════════
+     GLOW DIVIDER
+  ══════════════════════════════════════════════ */
+  .glow-divider {
+    height: 1px; margin: 28px 0;
+    background: linear-gradient(90deg, transparent, var(--violet), var(--cyan), transparent);
+    opacity: .35;
+  }
+
+  /* ══════════════════════════════════════════════
+     RESPONSIVE
+  ══════════════════════════════════════════════ */
+  @media (max-width: 720px) {
+    #sidebar { width: 100%; min-height: auto; position: relative; }
+    #main { margin-left: 0; }
+    .builder-body { grid-template-columns: 1fr; }
+    .builder-fields { border-right: none; border-bottom: 1px solid var(--border); }
+    .home-grid { grid-template-columns: 1fr; }
+    .page { padding: 24px 20px 48px; }
+    .niche-card-body { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════ SIDEBAR ══════════════ -->
+<nav id="sidebar">
+  <div id="sidebar-header">
+    <div class="logo-mark">✦</div>
+    <h1>Digital Product<br>Prompt Toolkit</h1>
+    <p>Sell on Hotmart · Powered by AI</p>
+  </div>
+  <nav>
+    <div class="nav-section">Start here</div>
+    <div class="nav-item active" data-page="home"><span class="icon">⬡</span> Home</div>
+    <div class="nav-item" data-page="niches"><span class="icon">🔥</span> Hot Niches</div>
+    <div class="nav-item" data-page="validate"><span class="icon">◎</span> Validate Your Idea</div>
+
+    <div class="nav-section" style="margin-top:6px">Build your product</div>
+    <div class="nav-item" data-page="prompts" data-tab="1"><span class="icon">①</span> Define Product</div>
+    <div class="nav-item" data-page="prompts" data-tab="2"><span class="icon">②</span> Create Outline</div>
+    <div class="nav-item" data-page="prompts" data-tab="3"><span class="icon">③</span> Write Chapters</div>
+    <div class="nav-item" data-page="prompts" data-tab="4a"><span class="icon">④</span> Intro &amp; Conclusion</div>
+    <div class="nav-item" data-page="prompts" data-tab="5"><span class="icon">⑤</span> Sales Page</div>
+    <div class="nav-item" data-page="prompts" data-tab="6"><span class="icon">⑥</span> Pricing &amp; Launch</div>
+    <div class="nav-item" data-page="prompts" data-tab="7"><span class="icon">⑦</span> Social Media Kit</div>
+
+    <div class="nav-section" style="margin-top:6px">Finalize</div>
+    <div class="nav-item" data-page="bonus"><span class="icon">★</span> Final Review</div>
+    <div class="nav-item" data-page="hotmart"><span class="icon">◈</span> Hotmart Setup</div>
+  </nav>
+</nav>
+
+<!-- ══════════════ MAIN ══════════════ -->
+<div id="main">
+
+  <!-- HOME -->
+  <div class="page active" id="page-home">
+    <div class="home-hero">
+      <h2>Your AI-Powered Product Studio ✦</h2>
+      <p>Go from blank page to a finished ebook ready to sell on Hotmart — using structured AI prompts, every step of the way. Browse hot niches, fill in your details, and copy polished prompts instantly.</p>
+    </div>
+    <div class="home-grid">
+      <div class="home-card" data-goto="niches">
+        <div class="hc-icon">🔥</div>
+        <h3>Explore Hot Niches</h3>
+        <p>The 5 best-selling digital product categories in 2026, with pricing and competition data.</p>
+      </div>
+      <div class="home-card" data-goto="validate">
+        <div class="hc-icon">◎</div>
+        <h3>Validate Your Idea</h3>
+        <p>A 6-point checklist and a prompt to confirm real market demand before you commit.</p>
+      </div>
+      <div class="home-card" data-goto="prompts">
+        <div class="hc-icon">✦</div>
+        <h3>Build Your Product</h3>
+        <p>7 prompt builders — fill in your details and get a ready-to-copy prompt for each step.</p>
+      </div>
+      <div class="home-card" data-goto="hotmart">
+        <div class="hc-icon">◈</div>
+        <h3>Publish on Hotmart</h3>
+        <p>A step-by-step checklist to get your product live and selling today.</p>
+      </div>
+    </div>
+    <div class="tip-box">
+      <strong>✦ How it works:</strong> Pick a niche → validate demand → fill in each prompt step in order → copy the generated prompt → paste into Claude or ChatGPT → use the AI output to build your ebook. Repeat for each step!
+    </div>
+  </div>
+
+  <!-- NICHES -->
+  <div class="page" id="page-niches">
+    <div class="page-title">🔥 Hot Niches on Hotmart in 2026</div>
+    <div class="page-subtitle">These 5 niches have the highest sales potential based on current market research and search trend data.</div>
+    <div class="rec-badge">⚡ Special recommendation for you at the bottom!</div>
+    <div class="niche-grid">
+
+      <div class="niche-card">
+        <div class="niche-card-header"><div class="niche-num">1</div><h3>AI in Practice for Non-Technical People</h3></div>
+        <div class="niche-card-body">
+          <div class="niche-why"><strong>Why it sells:</strong> Demand exploded in 2025–26. Searches for AI content doubled year over year. Every professional wants to use AI but doesn't know where to start — especially without a technical background.</div>
+          <div class="niche-meta"><strong>Difficulty</strong>Easy — perfect after an AI bootcamp!</div>
+          <div class="niche-meta"><strong>Price Range</strong>$7 – $47 USD</div>
+          <div class="niche-meta"><strong>Competition</strong>Medium — room for specific angles</div>
+          <div class="niche-meta"><strong>Example Angles</strong>AI for finance teams, AI for HR, AI for managers</div>
+        </div>
+      </div>
+
+      <div class="niche-card">
+        <div class="niche-card-header"><div class="niche-num">2</div><h3>Personal Finance for Millennials &amp; Gen Z</h3></div>
+        <div class="niche-card-body">
+          <div class="niche-why"><strong>Why it sells:</strong> "How to invest with little money", "budgeting for employees", and "financial independence by 35" are among the highest-converting digital product topics globally.</div>
+          <div class="niche-meta"><strong>Difficulty</strong>Medium</div>
+          <div class="niche-meta"><strong>Price Range</strong>$5 – $30 USD</div>
+          <div class="niche-meta"><strong>Competition</strong>High — go niche by demographic</div>
+          <div class="niche-meta"><strong>Example Angles</strong>Finance for freelancers, investing in your 20s</div>
+        </div>
+      </div>
+
+      <div class="niche-card">
+        <div class="niche-card-header"><div class="niche-num">3</div><h3>Productivity &amp; Career Growth</h3></div>
+        <div class="niche-card-body">
+          <div class="niche-why"><strong>Why it sells:</strong> Routines, promotions, remote work efficiency, and leadership guides are perennially popular with a growing audience in 2026 as remote-work skills stay in high demand.</div>
+          <div class="niche-meta"><strong>Difficulty</strong>Easy — based on personal experience</div>
+          <div class="niche-meta"><strong>Price Range</strong>$5 – $30 USD</div>
+          <div class="niche-meta"><strong>Competition</strong>High — proven to convert well</div>
+          <div class="niche-meta"><strong>Example Angles</strong>Getting promoted at big tech, deep work for remote workers</div>
+        </div>
+      </div>
+
+      <div class="niche-card">
+        <div class="niche-card-header"><div class="niche-num">4</div><h3>Mental Health &amp; Wellness</h3></div>
+        <div class="niche-card-body">
+          <div class="niche-why"><strong>Why it sells:</strong> Anxiety, burnout, sleep, and habit building have rising post-pandemic demand. Low-priced ebooks ($7–$17) sell in high volume driven by impulse purchases.</div>
+          <div class="niche-meta"><strong>Difficulty</strong>Medium</div>
+          <div class="niche-meta"><strong>Price Range</strong>$5 – $20 USD</div>
+          <div class="niche-meta"><strong>Competition</strong>Medium — go niche by audience</div>
+          <div class="niche-meta"><strong>Example Angles</strong>Burnout for tech workers, anxiety for new parents</div>
+        </div>
+      </div>
+
+      <div class="niche-card">
+        <div class="niche-card-header"><div class="niche-num">5</div><h3>Language Learning &amp; Fast-Track Guides</h3></div>
+        <div class="niche-card-body">
+          <div class="niche-why"><strong>Why it sells:</strong> English for the job market, English for tech professionals, Spanish in 30 days — huge Latin American and global audience with consistently high conversion rates.</div>
+          <div class="niche-meta"><strong>Difficulty</strong>Medium — requires fluency</div>
+          <div class="niche-meta"><strong>Price Range</strong>$7 – $30 USD</div>
+          <div class="niche-meta"><strong>Competition</strong>High — use a very specific angle</div>
+          <div class="niche-meta"><strong>Example Angles</strong>English for tech interviews, business Spanish in 4 weeks</div>
+        </div>
+      </div>
+
+    </div>
+    <div class="glow-divider"></div>
+    <div class="info-box">
+      <strong>⚡ Top pick for you:</strong> Niche #1 — AI in Practice for Non-Technical People. You have firsthand experience from this bootcamp, real examples from working at Nubank, and you know exactly what non-technical colleagues struggle with. That authenticity is what buyers pay for. Consider something like: <em>"How I Use AI to Save 2 Hours a Day at Work (No Coding Required)"</em>.
+    </div>
+  </div>
+
+  <!-- VALIDATE -->
+  <div class="page" id="page-validate">
+    <div class="page-title">◎ Validate Your Idea</div>
+    <div class="page-subtitle">Before writing a single word, spend 30 minutes confirming real demand exists. Check off each item, then use the prompt below to go deeper.</div>
+
+    <div class="card">
+      <div class="card-title">6-Point Validation Checklist</div>
+      <ul class="checklist">
+        <li><input type="checkbox" id="c1"><label for="c1"><strong>Google Trends:</strong> Go to trends.google.com — is your topic trending upward vs. 12 months ago?</label></li>
+        <li><input type="checkbox" id="c2"><label for="c2"><strong>Hotmart Marketplace:</strong> Search your niche. Do the bestsellers have many reviews?</label></li>
+        <li><input type="checkbox" id="c3"><label for="c3"><strong>Social proof:</strong> Are there Instagram/TikTok creators in this niche with large followings?</label></li>
+        <li><input type="checkbox" id="c4"><label for="c4"><strong>Amazon Books:</strong> Are physical books on this topic selling? If yes, ebook demand exists too.</label></li>
+        <li><input type="checkbox" id="c5"><label for="c5"><strong>Community research:</strong> Browse Facebook groups or Reddit in your niche — what questions come up most?</label></li>
+        <li><input type="checkbox" id="c6"><label for="c6"><strong>Real feedback:</strong> Ask 3–5 friends: "Would you pay $[X] for a guide that solves [problem]?"</label></li>
+      </ul>
+    </div>
+
+    <div class="prompt-builder">
+      <div class="builder-top">
+        <h2>Validation Prompt Builder</h2>
+        <p>Fill in your details, then copy the prompt straight into Claude or ChatGPT.</p>
+      </div>
+      <div class="builder-body">
+        <div class="builder-fields">
+          <div class="section-label">Your details</div>
+          <div class="field-group">
+            <label>Your topic / niche</label>
+            <input type="text" id="v-topic" placeholder="e.g. using AI tools at work" oninput="updatePrompt(&#39;validate&#39;)">
+            <div class="hint">Be specific — "AI for non-technical professionals" beats just "AI"</div>
+          </div>
+          <div class="field-group">
+            <label>Intended audience</label>
+            <input type="text" id="v-audience" placeholder="e.g. office workers aged 25–45" oninput="updatePrompt(&#39;validate&#39;)">
+          </div>
+          <div class="field-group">
+            <label>Planned price</label>
+            <input type="text" id="v-price" placeholder="e.g. $19" oninput="updatePrompt(&#39;validate&#39;)">
+          </div>
+        </div>
+        <div class="builder-preview">
+          <div class="section-label">Generated prompt</div>
+          <div class="prompt-output" id="out-validate">I'm thinking of creating an ebook about [YOUR TOPIC] to sell on Hotmart, targeting [YOUR AUDIENCE].
+
+Please help me:
+
+1. Identify the 5 biggest problems this audience faces related to the topic
+2. List the most common questions they search on Google
+3. Identify the most likely demographic profile of the buyer
+4. Suggest 3 unique angles that would differentiate my product from competitors
+5. Estimate whether [YOUR PRICE] would be perceived as fair value for this audience</div>
+          <button class="copy-btn" onclick="copyPrompt(&#39;out-validate&#39;, this)">📋 Copy Prompt</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROMPTS (Steps 1–7) -->
+  <div class="page" id="page-prompts">
+    <div class="page-title">✦ Build Your Product — 7 Steps</div>
+    <div class="page-subtitle">Fill in your details for each step and copy the generated prompt. Work through them in order — each step feeds into the next.</div>
+
+    <div class="step-tabs" id="step-tabs">
+      <button class="step-tab active" data-step="1">① Define</button>
+      <button class="step-tab" data-step="2">② Outline</button>
+      <button class="step-tab" data-step="3">③ Chapters</button>
+      <button class="step-tab" data-step="4a">④ Intro</button>
+      <button class="step-tab" data-step="4b">④ Conclusion</button>
+      <button class="step-tab" data-step="5">⑤ Sales Page</button>
+      <button class="step-tab" data-step="6">⑥ Pricing</button>
+      <button class="step-tab" data-step="7">⑦ Social Media</button>
+    </div>
+
+    <!-- Step 1 -->
+    <div class="step-panel active" id="step-1">
+      <div class="prompt-builder">
+        <div class="builder-top"><h2>Step 1 — Define Your Product</h2><p>Get clarity on what you're creating, who it's for, and what transformation it delivers.</p></div>
+        <div class="builder-body">
+          <div class="builder-fields">
+            <div class="section-label">Fill in your details</div>
+            <div class="field-group"><label>General topic</label><input type="text" id="s1-topic" placeholder="e.g. using AI tools at work" oninput="updatePrompt(&#39;s1&#39;)"></div>
+            <div class="field-group"><label>Target audience</label><input type="text" id="s1-audience" placeholder="e.g. professionals aged 25–40 not in IT" oninput="updatePrompt(&#39;s1&#39;)"></div>
+            <div class="field-group"><label>Problem it solves</label><textarea id="s1-problem" rows="2" placeholder="e.g. they waste hours on tasks AI could do" oninput="updatePrompt(&#39;s1&#39;)"></textarea></div>
+            <div class="field-group"><label>Desired transformation</label><textarea id="s1-transform" rows="2" placeholder="e.g. save 2 hours/day using AI tools" oninput="updatePrompt(&#39;s1&#39;)"></textarea></div>
+            <div class="field-group"><label>Approx. pages</label><input type="text" id="s1-pages" placeholder="e.g. 30–50 pages" oninput="updatePrompt(&#39;s1&#39;)"></div>
+          </div>
+          <div class="builder-preview">
+            <div class="section-label">Generated prompt</div>
+            <div class="prompt-output" id="out-s1">I want to create an ebook to sell on Hotmart. Help me define my product based on the information below:
+
+- General topic: [YOUR TOPIC]
+- Target audience: [YOUR AUDIENCE]
+- Problem it solves: [THE PROBLEM YOU SOLVE]
+- Desired transformation: [WHAT THE READER ACHIEVES]
+- Desired format: ebook of approximately [NUMBER OF PAGES]
+
+Based on this, give me:
+1. A clear one-sentence value proposition
+2. A main title (impactful, results-oriented)
+3. 3 alternative subtitle options
+4. The product's core promise
+5. 3 common objections the audience would have, and how to overcome each one</div>
+            <button class="copy-btn" onclick="copyPrompt(&#39;out-s1&#39;, this)">📋 Copy Prompt</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step-panel" id="step-2">
+      <div class="prompt-builder">
+        <div class="builder-top"><h2>Step 2 — Create a Strategic Outline</h2><p>Build the backbone of your ebook — a table of contents that tells a transformation story.</p></div>
+        <div class="builder-body">
+          <div class="builder-fields">
+            <div class="section-label">Fill in your details</div>
+            <div class="field-group"><label>Ebook title</label><input type="text" id="s2-title" placeholder="e.g. The Non-Technical AI Playbook" oninput="updatePrompt(&#39;s2&#39;)"></div>
+            <div class="field-group"><label>Target audience</label><input type="text" id="s2-audience" placeholder="e.g. office workers who want to use AI" oninput="updatePrompt(&#39;s2&#39;)"></div>
+            <div class="field-group"><label>Core promise</label><textarea id="s2-promise" rows="2" placeholder="e.g. save 2 hours a day with simple AI habits" oninput="updatePrompt(&#39;s2&#39;)"></textarea></div>
+            <div class="field-group"><label>Number of chapters</label><input type="text" id="s2-chapters" placeholder="e.g. 7 to 10 chapters" oninput="updatePrompt(&#39;s2&#39;)"></div>
+          </div>
+          <div class="builder-preview">
+            <div class="section-label">Generated prompt</div>
+            <div class="prompt-output" id="out-s2">I need to create a table of contents for an ebook with the following details:
+
+- Title: [EBOOK TITLE]
+- Audience: [YOUR AUDIENCE]
+- Core promise: [WHAT THE READER WILL ACHIEVE]
+- Desired number of chapters: [NUMBER OF CHAPTERS]
+
+Create a complete outline that:
+1. Starts with a chapter that identifies the problem (the reader must see themselves in it)
+2. Progresses logically from foundational concepts to advanced application
+3. Includes at least one 'quick wins' chapter with immediate results
+4. Ends with an action plan / next-steps chapter
+5. For each chapter: chapter title, 2–3 main subtopics, and the specific transformation it delivers</div>
+            <button class="copy-btn" onclick="copyPrompt(&#39;out-s2&#39;, this)">📋 Copy Prompt</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step-panel" id="step-3">
+      <div class="tip-box"><strong>✦ Tip:</strong> Use this prompt once per chapter — fill in new details each time. Generating one chapter at a time produces significantly better quality than asking for all at once.</div>
+      <div class="prompt-builder">
+        <div class="builder-top"><h2>Step 3 — Write a Chapter</h2><p>Reuse this prompt for every chapter in your outline.</p></div>
+        <div class="builder-body">
+          <div class="builder-fields">
+            <div class="section-label">Fill in your details</div>
+            <div class="field-group"><label>Chapter number</label><input type="text" id="s3-num" placeholder="e.g. 3" oninput="updatePrompt(&#39;s3&#39;)"></div>
+            <div class="field-group"><label>Ebook title</label><input type="text" id="s3-booktitle" placeholder="e.g. The Non-Technical AI Playbook" oninput="updatePrompt(&#39;s3&#39;)"></div>
+            <div class="field-group"><label>Chapter title</label><input type="text" id="s3-chaptertitle" placeholder="e.g. Your First AI Workflow" oninput="updatePrompt(&#39;s3&#39;)"></div>
+            <div class="field-group"><label>Subtopics to cover</label><textarea id="s3-subtopics" rows="2" placeholder="e.g. choosing the right tool, writing your first prompt, reviewing output" oninput="updatePrompt(&#39;s3&#39;)"></textarea></div>
+            <div class="field-group"><label>Audience</label><input type="text" id="s3-audience" placeholder="e.g. non-technical professionals" oninput="updatePrompt(&#39;s3&#39;)"></div>
+            <div class="field-group"><label>Tone of voice</label><input type="text" id="s3-tone" placeholder="e.g. friendly and educational, like a trusted mentor" oninput="updatePrompt(&#39;s3&#39;)"></div>
+            <div class="field-group"><label>Desired word count</label><input type="text" id="s3-length" placeholder="e.g. 800 to 1,200 words" oninput="updatePrompt(&#39;s3&#39;)"></div>
+          </div>
+          <div class="builder-preview">
+            <div class="section-label">Generated prompt</div>
+            <div class="prompt-output" id="out-s3">Write Chapter [NUMBER] of my ebook "[EBOOK TITLE]".
+
+Chapter title: [CHAPTER TITLE]
+Subtopics to cover: [LIST YOUR SUBTOPICS]
+Audience: [YOUR AUDIENCE]
+Tone of voice: [YOUR PREFERRED TONE]
+Desired length: [WORD COUNT]
+
+Instructions:
+- Open with an emotional hook or a relatable situation the reader recognizes
+- Use concrete, real-world examples from everyday work life
+- Include at least 1 practical exercise or reflection question at the end
+- Write in natural, conversational language — avoid unnecessary jargon
+- Close with a smooth transition hinting at the next chapter
+- Include at least 1 relevant quote or data point if possible</div>
+            <button class="copy-btn" onclick="copyPrompt(&#39;out-s3&#39;, this)">📋 Copy Prompt</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4A -->
+    <div class="step-panel" id="step-4a">
+      <div class="tip-box"><strong>✦ Tip:</strong> Write the introduction LAST — after all chapters are done. You'll know your content better and write a much stronger hook.</div>
+      <div class="prompt-builder">
+        <div class="builder-top"><h2>Step 4A — Write the Introduction</h2><p>The most important section of your ebook — it's what keeps readers going.</p></div>
+        <div class="builder-body">
+          <div class="builder-fields">
+            <div class="section-label">Fill in your details</div>
+            <div class="field-group"><label>Ebook title</label><input type="text" id="s4a-title" placeholder="e.g. The Non-Technical AI Playbook" oninput="updatePrompt(&#39;s4a&#39;)"></div>
+            <div class="field-group"><label>Target audience</label><input type="text" id="s4a-audience" placeholder="e.g. non-technical professionals" oninput="updatePrompt(&#39;s4a&#39;)"></div>
+            <div class="field-group"><label>Main pain the reader feels</label><textarea id="s4a-pain" rows="2" placeholder="e.g. they feel left behind as AI takes over but don&#39;t know how to start" oninput="updatePrompt(&#39;s4a&#39;)"></textarea></div>
+            <div class="field-group"><label>Core promise</label><textarea id="s4a-promise" rows="2" placeholder="e.g. practical AI habits that save 2 hours/day — no coding required" oninput="updatePrompt(&#39;s4a&#39;)"></textarea></div>
+            <div class="field-group"><label>Tone of voice</label><input type="text" id="s4a-tone" placeholder="e.g. warm, encouraging, like a knowledgeable friend" oninput="updatePrompt(&#39;s4a&#39;)"></div>
+          </div>
+          <div class="builder-preview">
+            <div class="section-label">Generated prompt</div>
+            <div class="prompt-output" id="out-s4a">Write the introduction for my ebook "[EBOOK TITLE]" using the AIDA structure (Attention, Interest, Desire, Action).
+
+Details:
+- Target audience: [YOUR AUDIENCE]
+- Main pain the reader feels: [DESCRIBE THE PAIN]
+- What the ebook delivers: [CORE PROMISE]
+- Tone of voice: [YOUR TONE]
+
+The introduction must:
+1. Open with a story or real situation that makes the reader say "that's exactly me!"
+2. Validate the reader's pain without judgment
+3. Introduce the author's credibility in 2–3 natural sentences
+4. Make a clear promise of what the reader will learn
+5. Preview the chapters in an exciting, scannable way
+6. Close with a call to action to keep reading
+
+Length: 400 to 600 words</div>
+            <button class="copy-btn" onclick="copyPrompt(&#39;out-s4a&#39;, this)">📋 Copy Prompt</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4B -->
+    <div class="step-panel" id="step-4b">
+      <div class="prompt-builder">
+        <div class="builder-top"><h2>Step 4B — Write the Conclusion</h2><p>Close strong — celebrate the reader and give them a clear next action.</p></div>
+        <div class="builder-body">
+          <div class="builder-fields">
+            <div class="section-label">Fill in your details</div>
+            <div class="field-group"><label>Ebook title</label><input type="text" id="s4b-title" placeholder="e.g. The Non-Technical AI Playbook" oninput="updatePrompt(&#39;s4b&#39;)"></div>
+            <div class="field-group"><label>Call to action (what should the reader do next?)</label><textarea id="s4b-cta" rows="2" placeholder="e.g. follow me on LinkedIn / join my free community / buy my next course" oninput="updatePrompt(&#39;s4b&#39;)"></textarea></div>
+            <div class="field-group"><label>Tone of voice</label><input type="text" id="s4b-tone" placeholder="e.g. warm and motivating" oninput="updatePrompt(&#39;s4b&#39;)"></div>
+          </div>
+          <div class="builder-preview">
+            <div class="section-label">Generated prompt</div>
+            <div class="prompt-output" id="out-s4b">Write the conclusion for my ebook "[EBOOK TITLE]".
+
+The conclusion must:
+1. Give an emotional (not technical) summary of the journey the reader just completed
+2. Celebrate the reader for getting all the way through
+3. Provide a '7-day action plan' with practical implementation steps
+4. Include a clear call to action: [WHAT SHOULD THE READER DO NEXT]
+5. Close with a memorable, encouraging final sentence
+
+Tone: warm and motivating
+Length: 300 to 500 words</div>
+            <button class="copy-btn" onclick="copyPrompt(&#39;out-s4b&#39;, this)">📋 Copy Prompt</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="step-panel" id="step-5">
+      <div class="info-box"><strong>⚡ This step is crucial:</strong> Your sales page copy is what converts visitors into buyers. It's the highest revenue-impact piece you'll write — invest real time here.</div>
+      <div class="prompt-builder">
+        <div class="builder-top"><h2>Step 5 — Sales Page Copy</h2><p>Generate the complete copy for your Hotmart sales page.</p></div>
+        <div class="builder-body">
+          <div class="builder-fields">
+            <div class="section-label">Fill in your details</div>
+            <div class="field-group"><label>Product name</label><input type="text" id="s5-name" placeholder="e.g. The Non-Technical AI Playbook" oninput="updatePrompt(&#39;s5&#39;)"></div>
+            <div class="field-group"><label>Target audience</label><input type="text" id="s5-audience" placeholder="e.g. professionals who want to use AI without coding" oninput="updatePrompt(&#39;s5&#39;)"></div>
+            <div class="field-group"><label>Price</label><input type="text" id="s5-price" placeholder="e.g. $27" oninput="updatePrompt(&#39;s5&#39;)"></div>
+            <div class="field-group"><label>Core promise / transformation</label><textarea id="s5-promise" rows="2" placeholder="e.g. save 2+ hours every workday using AI" oninput="updatePrompt(&#39;s5&#39;)"></textarea></div>
+            <div class="field-group"><label>Top 5 benefits (one per line)</label><textarea id="s5-benefits" rows="4" placeholder="e.g.
+Write emails 5x faster
+Summarize long reports in seconds
+Never start from a blank page again" oninput="updatePrompt(&#39;s5&#39;)"></textarea></div>
+            <div class="field-group"><label>Bonuses included (optional)</label><input type="text" id="s5-bonuses" placeholder="e.g. 50 ready-to-use prompt templates" oninput="updatePrompt(&#39;s5&#39;)"></div>
+          </div>
+          <div class="builder-preview">
+            <div class="section-label">Generated prompt</div>
+            <div class="prompt-output" id="out-s5">Write the complete sales page copy for my ebook on Hotmart.
+
+Product: [PRODUCT NAME]
+Audience: [YOUR AUDIENCE]
+Price: [YOUR PRICE]
+Core promise: [WHAT THE READER ACHIEVES]
+Top benefits:
+[LIST YOUR TOP BENEFITS]
+Bonuses included: none
+
+Write the copy in this exact order:
+1. Main HEADLINE (max 10 words, results-oriented)
+2. Supporting sub-headline (explains how and who it's for)
+3. Problem identification paragraph (2–3 sentences, empathetic tone)
+4. List of 6–8 benefit bullets ("You will learn/achieve...")
+5. About the author (2–3 sentences of credibility, human tone)
+6. What's included (full content breakdown)
+7. 3 realistic fictional testimonials (placeholder until real ones arrive)
+8. Guarantee section (7-day money-back)
+9. Final CTA with urgency line
+10. FAQ with 4 common questions and answers</div>
+            <button class="copy-btn" onclick="copyPrompt(&#39;out-s5&#39;, this)">📋 Copy Prompt</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 6 -->
+    <div class="step-panel" id="step-6">
+      <div class="prompt-builder">
+        <div class="builder-top"><h2>Step 6 — Pricing &amp; Launch Strategy</h2><p>Mispricing is one of the biggest first-time creator mistakes. Build a smart strategy from day one.</p></div>
+        <div class="builder-body">
+          <div class="builder-fields">
+            <div class="section-label">Fill in your details</div>
+            <div class="field-group"><label>Ebook title</label><input type="text" id="s6-title" placeholder="e.g. The Non-Technical AI Playbook" oninput="updatePrompt(&#39;s6&#39;)"></div>
+            <div class="field-group"><label>Niche</label><input type="text" id="s6-niche" placeholder="e.g. AI tools for non-technical professionals" oninput="updatePrompt(&#39;s6&#39;)"></div>
+            <div class="field-group"><label>Target audience</label><input type="text" id="s6-audience" placeholder="e.g. office workers aged 25–45" oninput="updatePrompt(&#39;s6&#39;)"></div>
+            <div class="field-group"><label>Competitor prices you found</label><input type="text" id="s6-competitors" placeholder="e.g. $9, $19, $47" oninput="updatePrompt(&#39;s6&#39;)"></div>
+            <div class="field-group"><label>Your unique differentiator</label><textarea id="s6-diff" rows="2" placeholder="e.g. real examples from working at a fintech + step-by-step format" oninput="updatePrompt(&#39;s6&#39;)"></textarea></div>
+          </div>
+          <div class="builder-preview">
+            <div class="section-label">Generated prompt</div>
+            <div class="prompt-output" id="out-s6">Help me define the pricing and launch strategy for my ebook "[EBOOK TITLE]" on Hotmart.
+
+Details:
+- Niche: [YOUR NICHE]
+- Audience: [YOUR AUDIENCE]
+- Competitor prices I found: [COMPETITOR PRICES]
+- My unique differentiator: [WHAT MAKES YOU UNIQUE]
+
+Please give me:
+1. A pricing recommendation with psychological rationale
+2. A 3-phase pricing strategy: pre-launch, launch week, and evergreen
+3. An idea for 1 high-perceived-value, low-cost bonus to include
+4. An affiliate strategy for Hotmart (recommended commission %)
+5. A 2-week pre-launch content plan for social media
+6. Scripts for 3 social media posts announcing the product</div>
+            <button class="copy-btn" onclick="copyPrompt(&#39;out-s6&#39;, this)">📋 Copy Prompt</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 7 -->
+    <div class="step-panel" id="step-7">
+      <div class="prompt-builder">
+        <div class="builder-top"><h2>Step 7 — Social Media Promotional Kit</h2><p>Generate a full launch kit of posts, stories, and emails in one shot.</p></div>
+        <div class="builder-body">
+          <div class="builder-fields">
+            <div class="section-label">Fill in your details</div>
+            <div class="field-group"><label>Ebook title</label><input type="text" id="s7-title" placeholder="e.g. The Non-Technical AI Playbook" oninput="updatePrompt(&#39;s7&#39;)"></div>
+            <div class="field-group"><label>Short description</label><textarea id="s7-desc" rows="2" placeholder="e.g. a practical guide to using AI at work without writing any code" oninput="updatePrompt(&#39;s7&#39;)"></textarea></div>
+            <div class="field-group"><label>Price</label><input type="text" id="s7-price" placeholder="e.g. $27" oninput="updatePrompt(&#39;s7&#39;)"></div>
+            <div class="field-group"><label>Tone of voice</label><input type="text" id="s7-tone" placeholder="e.g. professional but approachable, like a smart colleague" oninput="updatePrompt(&#39;s7&#39;)"></div>
+          </div>
+          <div class="builder-preview">
+            <div class="section-label">Generated prompt</div>
+            <div class="prompt-output" id="out-s7">Create a complete social media promotional kit for my ebook "[EBOOK TITLE]".
+
+Product: [SHORT DESCRIPTION]
+Platform: Hotmart
+Price: [YOUR PRICE]
+Tone of voice: [YOUR PREFERRED TONE]
+
+Please create:
+1. 3 Instagram carousel posts (text for each slide, 5–7 slides each)
+2. 2 Reels/TikTok scripts (30–60 seconds: hook → content → CTA)
+3. 2 LinkedIn posts (professional but approachable)
+4. 5 sequential Instagram Stories for launch day
+5. 1 launch email (subject line + full body)
+6. 3 Instagram bio variations with CTA pointing to the product</div>
+            <button class="copy-btn" onclick="copyPrompt(&#39;out-s7&#39;, this)">📋 Copy Prompt</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /page-prompts -->
+
+  <!-- BONUS -->
+  <div class="page" id="page-bonus">
+    <div class="page-title">★ Bonus — Final Review Prompt</div>
+    <div class="page-subtitle">Use this after finishing your full draft. Get a critical, expert-level evaluation before you publish.</div>
+    <div class="prompt-builder">
+      <div class="builder-top"><h2>Critical Product Review</h2><p>Paste your table of contents and introduction, and get honest structured feedback.</p></div>
+      <div class="builder-body">
+        <div class="builder-fields">
+          <div class="section-label">Fill in your details</div>
+          <div class="field-group"><label>Ebook title</label><input type="text" id="b-title" placeholder="e.g. The Non-Technical AI Playbook" oninput="updatePrompt(&#39;bonus&#39;)"></div>
+          <div class="field-group">
+            <label>Paste your table of contents + introduction</label>
+            <textarea id="b-content" rows="10" placeholder="Paste your full table of contents and introduction text here..." oninput="updatePrompt(&#39;bonus&#39;)"></textarea>
+          </div>
+        </div>
+        <div class="builder-preview">
+          <div class="section-label">Generated prompt</div>
+          <div class="prompt-output" id="out-bonus">Act as an experienced digital product creator with over 100 ebooks published on Hotmart. Give me a critical, honest review of my product.
+
+Ebook title: "[EBOOK TITLE]"
+
+[PASTE YOUR TABLE OF CONTENTS AND INTRODUCTION HERE]
+
+Please review:
+1. Does the table of contents tell a coherent transformation journey? What would you change?
+2. Is the title compelling for the target audience? Suggest 3 stronger alternatives if needed.
+3. Which chapters seem too shallow and should be expanded?
+4. Is there any important topic missing that competitors usually cover?
+5. On a scale of 1–10, what's your "sellability" score and why?
+6. What are the top 3 things that would make a buyer request a refund? How can I prevent each?</div>
+          <button class="copy-btn" onclick="copyPrompt(&#39;out-bonus&#39;, this)">📋 Copy Prompt</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOTMART -->
+  <div class="page" id="page-hotmart">
+    <div class="page-title">◈ How to Publish on Hotmart</div>
+    <div class="page-subtitle">With your ebook and sales copy ready, follow this checklist to go live.</div>
+    <div class="card">
+      <div class="card-title">Publishing Checklist</div>
+      <ul class="checklist">
+        <li><input type="checkbox" id="h1"><label for="h1">Go to <strong>hotmart.com</strong> and create a free Producer account.</label></li>
+        <li><input type="checkbox" id="h2"><label for="h2">Dashboard: <strong>Products → Create product → Ebook</strong>.</label></li>
+        <li><input type="checkbox" id="h3"><label for="h3">Fill in name, category, and description using the copy from <strong>Step 5</strong>.</label></li>
+        <li><input type="checkbox" id="h4"><label for="h4">Upload your ebook as a <strong>PDF file</strong> (max 1 GB). Use Canva to design it — free and beautiful templates!</label></li>
+        <li><input type="checkbox" id="h5"><label for="h5">Set your price. Tip: <strong>launch with 50% off for the first 7 days</strong> to collect your first reviews fast.</label></li>
+        <li><input type="checkbox" id="h6"><label for="h6">Enable the <strong>affiliate program</strong> (30–50% commission) so others can promote for you.</label></li>
+        <li><input type="checkbox" id="h7"><label for="h7">Add an attractive <strong>cover image</strong> (1:1 or 16:9 ratio).</label></li>
+        <li><input type="checkbox" id="h8"><label for="h8">Set up your <strong>checkout page</strong> with your sales copy from Step 5.</label></li>
+        <li><input type="checkbox" id="h9"><label for="h9">Run a <strong>test purchase</strong> to confirm everything works end-to-end.</label></li>
+        <li><input type="checkbox" id="h10"><label for="h10"><strong>Publish</strong> and promote using your content from Step 7! 🚀</label></li>
+      </ul>
+    </div>
+    <div class="tip-box">
+      <strong>✦ Required:</strong> Hotmart requires a minimum 7-day refund guarantee. This is actually an advantage — it reduces purchase hesitation, and refund rates are typically much lower than you'd expect.
+    </div>
+    <div class="info-box">
+      <strong>⚡ Design tip:</strong> Format your ebook in <strong>Canva (canva.com)</strong> before uploading. Great visual design increases perceived value and significantly reduces refund requests.
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<script>
+const templates = {
+  validate: (f) => `I'm thinking of creating an ebook about ${f.topic||'[YOUR TOPIC]'} to sell on Hotmart, targeting ${f.audience||'[YOUR AUDIENCE]'}.
+
+Please help me:
+
+1. Identify the 5 biggest problems this audience faces related to the topic
+2. List the most common questions they search on Google
+3. Identify the most likely demographic profile of the buyer
+4. Suggest 3 unique angles that would differentiate my product from competitors
+5. Estimate whether ${f.price||'[YOUR PRICE]'} would be perceived as fair value for this audience`,
+
+  s1: (f) => `I want to create an ebook to sell on Hotmart. Help me define my product based on the information below:
+
+- General topic: ${f.topic||'[YOUR TOPIC]'}
+- Target audience: ${f.audience||'[YOUR AUDIENCE]'}
+- Problem it solves: ${f.problem||'[THE PROBLEM YOU SOLVE]'}
+- Desired transformation: ${f.transform||'[WHAT THE READER ACHIEVES]'}
+- Desired format: ebook of approximately ${f.pages||'[NUMBER OF PAGES]'}
+
+Based on this, give me:
+1. A clear one-sentence value proposition
+2. A main title (impactful, results-oriented)
+3. 3 alternative subtitle options
+4. The product's core promise
+5. 3 common objections the audience would have, and how to overcome each one`,
+
+  s2: (f) => `I need to create a table of contents for an ebook with the following details:
+
+- Title: ${f.title||'[EBOOK TITLE]'}
+- Audience: ${f.audience||'[YOUR AUDIENCE]'}
+- Core promise: ${f.promise||'[WHAT THE READER WILL ACHIEVE]'}
+- Desired number of chapters: ${f.chapters||'[NUMBER OF CHAPTERS]'}
+
+Create a complete outline that:
+1. Starts with a chapter that identifies the problem (the reader must see themselves in it)
+2. Progresses logically from foundational concepts to advanced application
+3. Includes at least one 'quick wins' chapter with immediate results
+4. Ends with an action plan / next-steps chapter
+5. For each chapter: chapter title, 2–3 main subtopics, and the specific transformation it delivers`,
+
+  s3: (f) => `Write Chapter ${f.num||'[NUMBER]'} of my ebook "${f.booktitle||'[EBOOK TITLE]'}".
+
+Chapter title: ${f.chaptertitle||'[CHAPTER TITLE]'}
+Subtopics to cover: ${f.subtopics||'[LIST YOUR SUBTOPICS]'}
+Audience: ${f.audience||'[YOUR AUDIENCE]'}
+Tone of voice: ${f.tone||'[YOUR PREFERRED TONE]'}
+Desired length: ${f.length||'[WORD COUNT]'}
+
+Instructions:
+- Open with an emotional hook or a relatable situation the reader recognizes
+- Use concrete, real-world examples from everyday work life
+- Include at least 1 practical exercise or reflection question at the end
+- Write in natural, conversational language — avoid unnecessary jargon
+- Close with a smooth transition hinting at the next chapter
+- Include at least 1 relevant quote or data point if possible`,
+
+  s4a: (f) => `Write the introduction for my ebook "${f.title||'[EBOOK TITLE]'}" using the AIDA structure (Attention, Interest, Desire, Action).
+
+Details:
+- Target audience: ${f.audience||'[YOUR AUDIENCE]'}
+- Main pain the reader feels: ${f.pain||'[DESCRIBE THE PAIN]'}
+- What the ebook delivers: ${f.promise||'[CORE PROMISE]'}
+- Tone of voice: ${f.tone||'[YOUR TONE]'}
+
+The introduction must:
+1. Open with a story or real situation that makes the reader say "that's exactly me!"
+2. Validate the reader's pain without judgment
+3. Introduce the author's credibility in 2–3 natural sentences
+4. Make a clear promise of what the reader will learn
+5. Preview the chapters in an exciting, scannable way
+6. Close with a call to action to keep reading
+
+Length: 400 to 600 words`,
+
+  s4b: (f) => `Write the conclusion for my ebook "${f.title||'[EBOOK TITLE]'}".
+
+The conclusion must:
+1. Give an emotional (not technical) summary of the journey the reader just completed
+2. Celebrate the reader for getting all the way through
+3. Provide a '7-day action plan' with practical implementation steps
+4. Include a clear call to action: ${f.cta||'[WHAT SHOULD THE READER DO NEXT]'}
+5. Close with a memorable, encouraging final sentence
+
+Tone: ${f.tone||'warm and motivating'}
+Length: 300 to 500 words`,
+
+  s5: (f) => `Write the complete sales page copy for my ebook on Hotmart.
+
+Product: ${f.name||'[PRODUCT NAME]'}
+Audience: ${f.audience||'[YOUR AUDIENCE]'}
+Price: ${f.price||'[YOUR PRICE]'}
+Core promise: ${f.promise||'[WHAT THE READER ACHIEVES]'}
+Top benefits:
+${f.benefits||'[LIST YOUR TOP BENEFITS]'}
+Bonuses included: ${f.bonuses||'none'}
+
+Write the copy in this exact order:
+1. Main HEADLINE (max 10 words, results-oriented)
+2. Supporting sub-headline (explains how and who it's for)
+3. Problem identification paragraph (2–3 sentences, empathetic tone)
+4. List of 6–8 benefit bullets ("You will learn/achieve...")
+5. About the author (2–3 sentences of credibility, human tone)
+6. What's included (full content breakdown)
+7. 3 realistic fictional testimonials (placeholder until real ones arrive)
+8. Guarantee section (7-day money-back)
+9. Final CTA with urgency line
+10. FAQ with 4 common questions and answers`,
+
+  s6: (f) => `Help me define the pricing and launch strategy for my ebook "${f.title||'[EBOOK TITLE]'}" on Hotmart.
+
+Details:
+- Niche: ${f.niche||'[YOUR NICHE]'}
+- Audience: ${f.audience||'[YOUR AUDIENCE]'}
+- Competitor prices I found: ${f.competitors||'[COMPETITOR PRICES]'}
+- My unique differentiator: ${f.diff||'[WHAT MAKES YOU UNIQUE]'}
+
+Please give me:
+1. A pricing recommendation with psychological rationale
+2. A 3-phase pricing strategy: pre-launch, launch week, and evergreen
+3. An idea for 1 high-perceived-value, low-cost bonus to include
+4. An affiliate strategy for Hotmart (recommended commission %)
+5. A 2-week pre-launch content plan for social media
+6. Scripts for 3 social media posts announcing the product`,
+
+  s7: (f) => `Create a complete social media promotional kit for my ebook "${f.title||'[EBOOK TITLE]'}".
+
+Product: ${f.desc||'[SHORT DESCRIPTION]'}
+Platform: Hotmart
+Price: ${f.price||'[YOUR PRICE]'}
+Tone of voice: ${f.tone||'[YOUR PREFERRED TONE]'}
+
+Please create:
+1. 3 Instagram carousel posts (text for each slide, 5–7 slides each)
+2. 2 Reels/TikTok scripts (30–60 seconds: hook → content → CTA)
+3. 2 LinkedIn posts (professional but approachable)
+4. 5 sequential Instagram Stories for launch day
+5. 1 launch email (subject line + full body)
+6. 3 Instagram bio variations with CTA pointing to the product`,
+
+  bonus: (f) => `Act as an experienced digital product creator with over 100 ebooks published on Hotmart. Give me a critical, honest review of my product.
+
+Ebook title: "${f.title||'[EBOOK TITLE]'}"
+
+${f.content ? 'Table of contents + introduction:\n\n' + f.content : '[PASTE YOUR TABLE OF CONTENTS AND INTRODUCTION HERE]'}
+
+Please review:
+1. Does the table of contents tell a coherent transformation journey? What would you change?
+2. Is the title compelling for the target audience? Suggest 3 stronger alternatives if needed.
+3. Which chapters seem too shallow and should be expanded?
+4. Is there any important topic missing that competitors usually cover?
+5. On a scale of 1–10, what's your "sellability" score and why?
+6. What are the top 3 things that would make a buyer request a refund? How can I prevent each?`,
+};
+
+function getFields(id) {
+  const g = (s) => { const el = document.getElementById(s); return el ? el.value.trim() : ''; };
+  const maps = {
+    validate: { topic:'v-topic', audience:'v-audience', price:'v-price' },
+    s1: { topic:'s1-topic', audience:'s1-audience', problem:'s1-problem', transform:'s1-transform', pages:'s1-pages' },
+    s2: { title:'s2-title', audience:'s2-audience', promise:'s2-promise', chapters:'s2-chapters' },
+    s3: { num:'s3-num', booktitle:'s3-booktitle', chaptertitle:'s3-chaptertitle', subtopics:'s3-subtopics', audience:'s3-audience', tone:'s3-tone', length:'s3-length' },
+    s4a: { title:'s4a-title', audience:'s4a-audience', pain:'s4a-pain', promise:'s4a-promise', tone:'s4a-tone' },
+    s4b: { title:'s4b-title', cta:'s4b-cta', tone:'s4b-tone' },
+    s5: { name:'s5-name', audience:'s5-audience', price:'s5-price', promise:'s5-promise', benefits:'s5-benefits', bonuses:'s5-bonuses' },
+    s6: { title:'s6-title', niche:'s6-niche', audience:'s6-audience', competitors:'s6-competitors', diff:'s6-diff' },
+    s7: { title:'s7-title', desc:'s7-desc', price:'s7-price', tone:'s7-tone' },
+    bonus: { title:'b-title', content:'b-content' },
+  };
+  const map = maps[id] || {};
+  const result = {};
+  for (const [k, elId] of Object.entries(map)) result[k] = g(elId);
+  return result;
+}
+
+function updatePrompt(id) {
+  const outEl = document.getElementById('out-' + id);
+  if (!outEl || !templates[id]) return;
+  outEl.textContent = templates[id](getFields(id));
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  ['validate','s1','s2','s3','s4a','s4b','s5','s6','s7','bonus'].forEach(updatePrompt);
+});
+
+function copyPrompt(outId, btn) {
+  const text = document.getElementById(outId).textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.innerHTML;
+    btn.innerHTML = '✅ Copied!'; btn.classList.add('copied');
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    btn.innerHTML = '✅ Copied!'; btn.classList.add('copied');
+    setTimeout(() => { btn.innerHTML = '📋 Copy Prompt'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+function showPage(pageId, tabId) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const page = document.getElementById('page-' + pageId);
+  if (page) page.classList.add('active');
+  if (pageId === 'prompts') switchStep(tabId || '1');
+  // highlight sidebar
+  document.querySelectorAll('.nav-item[data-page="' + pageId + '"]').forEach((n, i) => {
+    if (!tabId && i === 0) n.classList.add('active');
+    if (tabId && n.dataset.tab === tabId) n.classList.add('active');
+  });
+  window.scrollTo(0, 0);
+}
+
+function switchStep(stepId) {
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.step-tab').forEach(t => t.classList.remove('active'));
+  const panel = document.getElementById('step-' + stepId);
+  if (panel) panel.classList.add('active');
+  document.querySelectorAll('.step-tab[data-step="' + stepId + '"]').forEach(t => t.classList.add('active'));
+}
+
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', () => showPage(item.dataset.page, item.dataset.tab || null));
+});
+document.querySelectorAll('.home-card[data-goto]').forEach(card => {
+  card.addEventListener('click', () => showPage(card.dataset.goto));
+});
+document.querySelectorAll('.step-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    switchStep(tab.dataset.step);
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.querySelectorAll('.nav-item[data-page="prompts"]').forEach(n => {
+      if (n.dataset.tab === tab.dataset.step) n.classList.add('active');
+    });
+  });
+});
+</script>
+
+
+</body></html>
